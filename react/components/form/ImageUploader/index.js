@@ -1,3 +1,4 @@
+import browserImageSize from 'browser-image-size'
 import PropTypes from 'prop-types'
 import React, { Component, Fragment } from 'react'
 import { graphql } from 'react-apollo'
@@ -33,11 +34,13 @@ class ImageUploader extends Component {
   }
 
   handleImageDrop = async acceptedFiles => {
-    const { uploadFile } = this.props
+    const {
+      uploadFile,
+      schema: { maxWidth, minWidth, maxHeigth, minHeigth },
+     } = this.props
 
     if (acceptedFiles && acceptedFiles[0]) {
       this.setState({ isLoading: true })
-
       try {
         const {
           data: {
@@ -48,12 +51,33 @@ class ImageUploader extends Component {
         })
 
         if (fileUrl) {
-          const fileUrlObj = new URL(fileUrl)
+          const that = this
+          browserImageSize(fileUrl).then(function (size) {
+            if(size.heigth > maxHeigth
+            || size.width > maxWidth
+            || size.heigth < minHeigth
+            || size.width < minWidth) {
 
-          this.props.onChange(fileUrlObj.pathname)
+              that.setState({
+                error: 'Check image dimensions',
+                isLoading: false,
+              })
+            }
+            else {
+              const fileUrlObj = new URL(fileUrl)
 
-          this.setState({ isLoading: false })
+              that.props.onChange(fileUrlObj.pathname)
+
+              that.setState({ isLoading: false })
+            }
+          }).catch(err => {
+            that.setState({
+              error: err,
+              isLoading: false
+            })
+          })
         }
+
       } catch (e) {
         this.setState({
           error: 'Something went wrong. Please try again.',
@@ -78,6 +102,7 @@ class ImageUploader extends Component {
       schema: { title },
       value,
     } = this.props
+
     const { error, isLoading } = this.state
 
     const FieldTitle = () => (

@@ -210,12 +210,19 @@ declare global {
   interface ComponentSchema {
     type?: string
     title?: string
+    default?: any
     description?: string
     enumNames?: any
+    enum?: any
     widget?: any
     items?: any
+    maxHeigth?: number
+    maxWidth?: number
+    minHeigth?: number
+    minWidth?: number
     minItems?: number
     properties?: ComponentSchemaProperties
+    elements?: ComponentSchemaProperties
   }
 
   type UISchema = any

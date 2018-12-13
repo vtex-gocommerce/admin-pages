@@ -1,6 +1,7 @@
 import { filter, has, keys, map, merge, pick, reduce } from 'ramda'
 import { IChangeEvent } from 'react-jsonschema-form'
 import { global, RenderComponent, Window } from 'render'
+import { translateFromNative } from './nativeMap'
 
 /**
  * It receives a component implementation and decide which type of schema
@@ -46,6 +47,8 @@ export const getComponentSchema = (
         Array.isArray(value) ? map(translate, value) : translate(value),
       pick(['title', 'description', 'enumNames'], schema) as object,
     )
+
+    schema = translateFromNative(schema)
 
     if (has('widget', schema)) {
       translatedSchema.widget = merge(
