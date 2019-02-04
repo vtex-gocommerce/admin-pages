@@ -252,12 +252,15 @@ declare global {
     type?: string
     title?: string
     description?: string
+    default?: any
+    enum?: any[]
     enumNames?: any
     widget?: any
     items?: any
     minItems?: number
     properties?: ComponentSchemaProperties
     isLayout?: boolean
+    elements?: ComponentSchemaProperties
   }
 
   type UISchema = any
