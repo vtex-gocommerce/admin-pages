@@ -16,6 +16,7 @@
     "vtex.pages-graphql": "2.x",
     "vtex.store": "2.x",
     "vtex.styles-graphql": "1.x",
+    "vtex.store-graphql": "2.x",
     "vtex.styleguide": "9.x"
   },
   "mustUpdateAt": "2018-09-05",
@@ -27,9 +28,7 @@
   "scripts": {
     "postreleasy": "vtex publish -r vtex --verbose"
   },
-  "policies": [
-    {
-      "name": "vtex.file-manager:saveFileAsync"
-    }
-  ]
+  "policies": [{
+    "name": "vtex.file-manager:saveFileAsync"
+  }]
 }
