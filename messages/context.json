@@ -114,5 +114,21 @@
   "pages.editor.store.button.settings.title": "pages.editor.store.button.settings.title",
   "pages.editor.store.button.theme.title": "pages.editor.store.button.theme.title",
   "pages.editor.store.button.template.title": "pages.editor.store.button.template.title",
-  "pages.editor.store.button.back.title": "pages.editor.store.button.back.title"
+  "pages.editor.store.button.back.title": "pages.editor.store.button.back.title",
+  "pages.editor.components.brand.title": "pages.editor.components.brand.title",
+  "pages.editor.components.category.title": "pages.editor.components.category.title",
+  "pages.editor.components.collection.title": "pages.editor.components.collection.title",
+  "pages.editor.components.department.title": "pages.editor.components.department.title",
+  "pages.editor.components.image.description.title": "pages.editor.components.image.description.title",
+  "pages.editor.components.image.desktop.title": "pages.editor.components.image.desktop.title",
+  "pages.editor.components.image.mobile.title": "pages.editor.components.image.mobile.title",
+  "pages.editor.components.link.externalRoute.title": "pages.editor.components.link.externalRoute.title",
+  "pages.editor.components.link.hasLink.title": "pages.editor.components.link.hasLink.description",
+  "pages.editor.components.link.page.title": "pages.editor.components.link.page.title",
+  "pages.editor.components.link.params.title": "pages.editor.components.link.params.title",
+  "pages.editor.components.link.url.title": "pages.editor.components.link.url.title",
+  "pages.editor.components.text.title": "pages.editor.components.text.title",
+  "pages.editor.components.video.description.title": "pages.editor.components.video.description.title",
+  "pages.editor.components.video.title.title": "pages.editor.components.video.title.title",
+  "pages.editor.components.video.url.title": "pages.editor.components.video.url.title"
 }
