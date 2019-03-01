@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 import StyleEditor from './StyleEditor'
 import StyleList from './StyleList'
+
+import LoadingScreen from './components/LoadingScreen'
 
 const SELECTED_STYLE_TAG_ID = 'style_link'
 const PATH_STYLE_TAG_ID = 'style_path'
@@ -65,6 +67,7 @@ const removeStyleTag = (window: Window, id: string) => {
 
 const Styles: React.SFC<Props> = ({ iframeWindow }) => {
   const [editing, setEditing] = useState<EditingState>(undefined)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     createStyleTag(iframeWindow, PATH_STYLE_TAG_ID)
@@ -74,19 +77,27 @@ const Styles: React.SFC<Props> = ({ iframeWindow }) => {
       removeStyleTag(iframeWindow, PATH_STYLE_TAG_ID)
       removeStyleTag(iframeWindow, SHEET_STYLE_TAG_ID)
     }
-  })
+  }, [])
 
-  return editing ? (
-    <StyleEditor
-      style={editing}
-      stopEditing={() => setEditing(undefined)}
-      setStyleAsset={setStyleAsset(iframeWindow)}
-    />
-  ) : (
-    <StyleList
-      startEditing={setEditing}
-      setStyleAsset={setStyleAsset(iframeWindow)}
-    />
+  return (
+    <Fragment>
+      {loading && <LoadingScreen />}
+      {editing ? (
+        <StyleEditor
+          style={editing}
+          stopEditing={() => setEditing(undefined)}
+          setStyleAsset={setStyleAsset(iframeWindow)}
+          setLoading={setLoading}
+          isLoading={loading}
+        />
+      ) : (
+        <StyleList
+          startEditing={setEditing}
+          setStyleAsset={setStyleAsset(iframeWindow)}
+          setLoading={setLoading}
+        />
+      )}
+    </Fragment>
   )
 }
 

@@ -10,6 +10,7 @@ import StyleCard from './StyleCard'
 interface Props {
   startEditing: (style: Style) => void
   setStyleAsset: (asset: StyleAssetInfo) => void
+  setLoading: (loading: boolean) => void
 }
 
 const compareStyles = (a: Style, b: Style) => {
@@ -30,7 +31,11 @@ const compareStyles = (a: Style, b: Style) => {
   }, 0)
 }
 
-const StyleList: React.SFC<Props> = ({ startEditing, setStyleAsset }) => {
+const StyleList: React.SFC<Props> = ({
+  startEditing,
+  setStyleAsset,
+  setLoading,
+}) => {
   return (
     <Operations>
       {({
@@ -44,7 +49,11 @@ const StyleList: React.SFC<Props> = ({ startEditing, setStyleAsset }) => {
 
         const selected = listStyles && find(style => style.selected, listStyles)
         if (selected && !loading) {
-          setStyleAsset({ type: 'path', selected: true, value: selected.path })
+          setStyleAsset({
+            selected: true,
+            type: 'path',
+            value: selected.path,
+          })
         }
 
         return loading ? (
@@ -71,14 +80,16 @@ const StyleList: React.SFC<Props> = ({ startEditing, setStyleAsset }) => {
                     <StyleCard
                       key={style.id}
                       style={style}
-                      selectStyle={({ id, name }: Style) =>
+                      selectStyle={({ id, name }: Style) => {
+                        setLoading(true)
                         saveSelectedStyle({ variables: { id } }).then(() => {
                           showToast({
                             horizontalPosition: 'right',
                             message: `Style '${name}' was selected.`,
                           })
+                          setLoading(false)
                         })
-                      }
+                      }}
                       deleteStyle={({ config, name, id }: Style) => {
                         deleteStyle({ variables: { id } }).then(() => {
                           showToast({

@@ -17,6 +17,8 @@ interface Props {
   style: Style
   stopEditing: () => void
   setStyleAsset: (asset: StyleAssetInfo) => void
+  setLoading: (loading: boolean) => void
+  isLoading: boolean
 }
 
 interface EditorProps {
@@ -24,6 +26,8 @@ interface EditorProps {
   addNavigation: (info: NavigationInfo) => void
   updateConfig: React.Dispatch<Partial<TachyonsConfig>>
   setStyleAsset: (asset: StyleAssetInfo) => void
+  setLoading: (loading: boolean) => void
+  isLoading: boolean
 }
 
 interface UpdateStyleResult {
@@ -43,6 +47,8 @@ const Editor: React.SFC<EditorProps> = ({
   config,
   updateConfig,
   setStyleAsset,
+  setLoading,
+  isLoading,
 }) => {
   const [mode, setMode] = useState<EditMode>(undefined)
 
@@ -62,11 +68,16 @@ const Editor: React.SFC<EditorProps> = ({
       variables={{ config }}
       fetchPolicy={'network-only'}
     >
-      {({ data }: QueryResult<{ generateStyleSheet: string }>) => {
+      {({ data, loading }: QueryResult<{ generateStyleSheet: string }>) => {
+        if (!isLoading && loading) {
+          setLoading(true)
+        }
+
         const stylesheet = data && data.generateStyleSheet
 
-        if (stylesheet) {
+        if (stylesheet && !loading) {
           setStyleAsset({ type: 'stylesheet', value: stylesheet })
+          setLoading(false)
         }
 
         switch (mode) {
@@ -110,6 +121,8 @@ const StyleEditor: React.SFC<Props> = ({
   stopEditing,
   style,
   setStyleAsset,
+  setLoading,
+  isLoading,
 }) => {
   const [config, updateConfig] = useReducer<ConfigReducer>(
     mergeDeepRight as ConfigReducer,
@@ -168,6 +181,8 @@ const StyleEditor: React.SFC<Props> = ({
                         updateNavigation({ info, type: 'push' })
                       }}
                       setStyleAsset={setStyleAsset}
+                      setLoading={setLoading}
+                      isLoading={isLoading}
                     />
                   )}
                 </StyleEditorTools>
