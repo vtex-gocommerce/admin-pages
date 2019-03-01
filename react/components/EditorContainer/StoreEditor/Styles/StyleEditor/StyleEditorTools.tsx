@@ -3,7 +3,7 @@ import { Button, IconArrowBack, Input } from 'vtex.styleguide'
 
 interface Props {
   initialState: NavigationInfo
-  saveStyle: () => void
+  saveStyle: () => Promise<void>
   children: (
     updateNavigation: React.Dispatch<NavigationUpdate>
   ) => React.ReactNode
@@ -22,6 +22,8 @@ const StyleEditorTools: React.SFC<Props> = ({
   setName,
 }) => {
   const [editing, setEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const [navigation, updateNavigation] = useReducer<NavigationReducer>(
     (state, update) => {
       const newInfo = update.info ? [update.info] : []
@@ -89,9 +91,13 @@ const StyleEditorTools: React.SFC<Props> = ({
             variation="tertiary"
             size="small"
             onClick={() => {
+              setLoading(true)
               setEditing(false)
-              saveStyle()
+              saveStyle().finally(() => {
+                setLoading(false)
+              })
             }}
+            isLoading={loading}
           >
             Save
           </Button>
