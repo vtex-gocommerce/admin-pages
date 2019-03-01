@@ -69,10 +69,8 @@ const StyleCard: React.SFC<Props> = ({
             </div>
             <ActionMenu
               label="Actions"
-              icon={<IconOptionsDots />}
-              hideCaretIcon
               buttonProps={{
-                icon: true,
+                icon: <IconOptionsDots />,
                 variation: 'tertiary',
               }}
               options={createMenuOptions()}
