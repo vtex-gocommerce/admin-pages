@@ -86,6 +86,7 @@
   "pages.editor.components.modal.button.discard": "pages.editor.components.modal.button.discard",
   "pages.editor.components.modal.text": "pages.editor.components.modal.text",
   "pages.editor.components.title": "pages.editor.components.title",
+  "pages.editor.components.blocks-library.title": "pages.editor.components.blocks-library.title",
   "pages.editor.component-list.action-menu.delete": "pages.editor.component-list.action-menu.delete",
   "pages.editor.component-list.button.save": "pages.editor.component-list.button.save",
   "pages.editor.component-list.button.undo": "pages.editor.component-list.button.undo",
