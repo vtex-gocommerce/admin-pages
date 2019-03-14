@@ -1,5 +1,5 @@
 {
-  "vendor": "vtex",
+  "vendor": "gocommerce",
   "name": "admin-pages",
   "version": "3.0.0-beta.3",
   "title": "VTEX Pages Admin",
@@ -10,7 +10,7 @@
     "react": "3.x"
   },
   "dependencies": {
-    "vtex.admin": "2.x",
+    "gocommerce.admin": "1.x",
     "vtex.file-manager": "0.x",
     "vtex.file-manager-graphql": "0.x",
     "vtex.pages-graphql": "2.x",
@@ -20,9 +20,7 @@
   },
   "mustUpdateAt": "2018-09-05",
   "categories": [],
-  "registries": [
-    "smartcheckout"
-  ],
+  "registries": ["smartcheckout"],
   "settingsSchema": {},
   "scripts": {
     "postreleasy": "vtex publish -r vtex --verbose"
