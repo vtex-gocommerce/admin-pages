@@ -1,0 +1,14 @@
+{
+  "gocommerce.admin:inject#storeeditor": {
+    "props": {
+      "page": "admin.cms.storefront-home",
+      "title": "admin.container.sidebar.storefront"
+    }
+  },
+  "gocommerce.admin:inject#pages": {
+    "props": {
+      "page": "admin.cms.pages",
+      "title": "Pages"
+    }
+  }
+}
