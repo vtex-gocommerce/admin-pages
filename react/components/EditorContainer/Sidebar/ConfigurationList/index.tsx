@@ -4,9 +4,10 @@ import { injectIntl } from 'react-intl'
 import { IChangeEvent } from 'react-jsonschema-form'
 import { Spinner, ToastConsumerFunctions } from 'vtex.styleguide'
 
+import DeleteContent from '../../../../queries/DeleteContent.graphql'
 import ListContent from '../../../../queries/ListContent.graphql'
 import SaveContent from '../../../../queries/SaveContent.graphql'
-import { getBlockPath } from '../../../../utils/blocks'
+import { getBlockPath, getSitewideTreePath } from '../../../../utils/blocks'
 import {
   getComponentSchema,
   getExtension,
@@ -15,6 +16,7 @@ import {
   updateExtensionFromForm,
 } from '../../../../utils/components'
 import { FormMetaContext, ModalContext } from '../typings'
+import { DeleteContentVariables } from './typings'
 
 import ContentEditor from './ContentEditor'
 import LayoutEditor from './LayoutEditor'
@@ -30,6 +32,7 @@ interface ListContentQuery {
 }
 
 interface Props {
+  deleteContent: MutationFn<{ deleteContent: string }, DeleteContentVariables>
   editor: EditorContext
   listContent: ListContentQuery
   iframeRuntime: RenderContext
@@ -121,9 +124,11 @@ class ConfigurationList extends Component<Props, State> {
         <List
           configurations={listContentQuery.listContent}
           editor={editor}
+          iframeRuntime={iframeRuntime}
           isDisabledChecker={this.isConfigurationDisabled}
           isSitewide={this.isSitewide}
           onClose={this.handleQuit}
+          onDelete={this.handleContentDelete}
           onCreate={this.handleConfigurationCreation}
           onSelect={this.handleConfigurationOpen}
           path={this.props.editor.iframeWindow.location.pathname}
@@ -309,6 +314,12 @@ class ConfigurationList extends Component<Props, State> {
       label,
     }
 
+    const treePath = editor.editTreePath!
+
+    const formattedTreePath = this.isSitewide
+      ? getSitewideTreePath(treePath)
+      : treePath
+
     formMeta.toggleLoading()
 
     try {
@@ -318,7 +329,7 @@ class ConfigurationList extends Component<Props, State> {
           template: this.isSitewide
             ? '*'
             : iframeRuntime.pages[iframeRuntime.page].blockId,
-          treePath: editor.editTreePath,
+          treePath: formattedTreePath,
         },
       })
 
@@ -342,6 +353,54 @@ class ConfigurationList extends Component<Props, State> {
 
         console.log(err)
       })
+    }
+  }
+
+  private handleContentDelete: MutationFn<
+    { deleteContent: string },
+    DeleteContentVariables
+  > = async options => {
+    const { editor, iframeRuntime } = this.props
+    editor.setIsLoading(true)
+    try {
+      await this.props.deleteContent({
+        ...options,
+        update: (store, { data }) => {
+          const variables = {
+            pageContext: iframeRuntime.route.pageContext,
+            template: iframeRuntime.pages[iframeRuntime.page].blockId,
+            treePath: editor.editTreePath,
+          }
+
+          const { listContent } = store.readQuery<{
+            listContent: ExtensionConfiguration[]
+          }>({ query: ListContent, variables }) || { listContent: [] }
+          const newConfigurations = {
+            listContent: listContent.filter(
+              ({ contentId }) => contentId !== data!.deleteContent
+            ),
+          }
+          store.writeQuery({
+            data: newConfigurations,
+            query: ListContent,
+            variables,
+          })
+        },
+      })
+
+      editor.setIsLoading(false)
+      this.props.showToast({
+        horizontalPosition: 'right',
+        message: 'Content deleted.',
+      })
+    } catch (e) {
+      editor.setIsLoading(false)
+      this.props.showToast({
+        horizontalPosition: 'right',
+        message: 'Something went wrong. Please try again.',
+      })
+
+      console.error(e)
     }
   }
 
@@ -407,5 +466,6 @@ export default compose(
       },
     }),
   }),
-  graphql(SaveContent, { name: 'saveContent' })
+  graphql(SaveContent, { name: 'saveContent' }),
+  graphql<DeleteContentVariables>(DeleteContent, { name: 'deleteContent' })
 )(ConfigurationList)
