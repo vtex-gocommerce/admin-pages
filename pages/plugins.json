@@ -1,3 +1,5 @@
 {
-  "storeWrapper > highlight-overlay": "highlight-overlay.cms"
+  "storeWrapper > highlight-overlay": "highlight-overlay.cms",
+  "gocommerce.admin:container > navigation-online-store > gocommerce.admin:inject": "gocommerce.admin:inject#storeeditor",
+  "gocommerce.admin:container > navigation-online-store > gocommerce.admin:inject": "gocommerce.admin:inject#pages"
 }
