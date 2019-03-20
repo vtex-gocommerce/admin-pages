@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.0-beta.4] - 2019-03-19
+
+### Added
+
+- Redirect `type` support.
+
 ## [3.0.0-beta.3] - 2019-02-28
 
 ## [3.0.0-beta.2] - 2019-02-28
