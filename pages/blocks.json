@@ -1,20 +1,14 @@
 {
-  "inject#storefront": {
+  "gocommerce.admin:inject#storeeditor": {
     "props": {
-      "subItems": [
-        {
-          "isNew": true,
-          "labelId": "pages.admin-menu-button.storefront",
-          "path": "/admin/cms/storefront"
-        },
-        {
-          "isNew": true,
-          "labelId": "pages.admin-menu-button.pages",
-          "path": "/admin/cms/pages"
-        }
-      ],
-      "titleId": "appframe.navigation.cms.title",
-      "group": "storeSetup"
+      "page": "admin.cms.storefront-home",
+      "title": "admin.container.sidebar.storefront"
+    }
+  },
+  "gocommerce.admin:inject#pages": {
+    "props": {
+      "page": "admin.cms.pages",
+      "title": "Pages"
     }
   }
 }
