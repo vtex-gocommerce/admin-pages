@@ -2,13 +2,13 @@
   "gocommerce.admin:inject#storeeditor": {
     "props": {
       "page": "admin.cms.storefront-home",
-      "title": "admin.container.sidebar.storefront"
+      "title": "pages.admin-menu-button.storefront"
     }
   },
   "gocommerce.admin:inject#pages": {
     "props": {
-      "page": "admin.cms.pages",
-      "title": "Pages"
+      "page": "admin.cms.pages.page-list",
+      "title": "pages.admin-menu-button.pages"
     }
   }
 }

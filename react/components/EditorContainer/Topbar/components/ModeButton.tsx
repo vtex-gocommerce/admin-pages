@@ -24,7 +24,20 @@ const icon = (mode?: StoreEditMode) => {
   }
 }
 
-const ModeButton: React.SFC<Props> = ({ changeMode, mode }) => {
+const getTitle = (mode?: StoreEditMode) => {
+  if (!mode) {
+    return 'pages.editor.store.button.back.title'
+  }
+
+  return {
+    [mode]: 'pages.editor.store.button.back.title',
+    settings: 'pages.editor.store.button.settings.title',
+    template: 'pages.editor.store.button.template.title',
+    theme: 'pages.editor.store.button.theme.title',
+  }[mode]
+}
+
+const ModeButton: React.FunctionComponent<Props> = ({ changeMode, mode }) => {
   return (
     <div
       className="pointer mh3 h-3em w4 flex justify-center items-center"
@@ -32,9 +45,7 @@ const ModeButton: React.SFC<Props> = ({ changeMode, mode }) => {
     >
       {icon(mode)}
       <div className={`pl4 b mid-gray ${mode ? '' : 'c-action-primary'}`}>
-        <FormattedMessage
-          id={`pages.editor.store.button.${mode || 'back'}.title`}
-        />
+        <FormattedMessage id={getTitle(mode)} />
       </div>
     </div>
   )
