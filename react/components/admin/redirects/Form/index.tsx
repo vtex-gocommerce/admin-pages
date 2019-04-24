@@ -82,20 +82,20 @@ class Form extends Component<Props, State> {
           onClickCancel={this.toggleModalVisibility}
           onClose={this.toggleModalVisibility}
           textButtonAction={intl.formatMessage({
-            id: 'pages.admin.redirects.form.button.remove',
+            id: 'admin/pages.admin.redirects.form.button.remove',
           })}
           textButtonCancel={intl.formatMessage({
-            id: 'pages.admin.redirects.form.button.cancel',
+            id: 'admin/pages.admin.redirects.form.button.cancel',
           })}
           textMessage={intl.formatMessage({
-            id: 'pages.admin.redirects.form.modal.text',
+            id: 'admin/pages.admin.redirects.form.modal.text',
           })}
         />
         <FormattedMessage
           id={
             this.isViewMode
-              ? 'pages.admin.redirects.form.title.info'
-              : 'pages.admin.redirects.form.title.new'
+              ? 'admin/pages.admin.redirects.form.title.info'
+              : 'admin/pages.admin.redirects.form.title.new'
           }
         >
           {text => <h1>{text}</h1>}
@@ -105,7 +105,7 @@ class Form extends Component<Props, State> {
           <Input
             disabled={this.isViewMode}
             label={intl.formatMessage({
-              id: 'pages.admin.redirects.table.from',
+              id: 'admin/pages.admin.redirects.table.from',
             })}
             onChange={this.updateFrom}
             required
@@ -115,7 +115,7 @@ class Form extends Component<Props, State> {
           <Input
             disabled={this.isViewMode}
             label={intl.formatMessage({
-              id: 'pages.admin.redirects.table.to',
+              id: 'admin/pages.admin.redirects.table.to',
             })}
             onChange={this.updateTo}
             required
@@ -128,13 +128,13 @@ class Form extends Component<Props, State> {
             options={[
               {
                 label: intl.formatMessage({
-                  id: 'pages.admin.redirects.form.toggle.permanent',
+                  id: 'admin/pages.admin.redirects.form.toggle.permanent',
                 }),
                 value: 'permanent',
               },
               {
                 label: intl.formatMessage({
-                  id: 'pages.admin.redirects.form.toggle.temporary',
+                  id: 'admin/pages.admin.redirects.form.toggle.temporary',
                 }),
                 value: 'temporary',
               },
@@ -150,7 +150,7 @@ class Form extends Component<Props, State> {
                   checked={shouldShowDatePicker}
                   disabled={this.isViewMode}
                   label={intl.formatMessage({
-                    id: 'pages.admin.redirects.form.toggle.endDate',
+                    id: 'admin/pages.admin.redirects.form.toggle.endDate',
                   })}
                   onChange={this.toggleDatePickerVisibility}
                 />
@@ -162,13 +162,13 @@ class Form extends Component<Props, State> {
                     <Input
                       disabled
                       label={intl.formatMessage({
-                        id: 'pages.admin.redirects.form.datePicker.title',
+                        id: 'admin/pages.admin.redirects.form.datePicker.title',
                       })}
                       value={getFormattedLocalizedDate(data.endDate, locale)}
                     />
                   ) : (
                     <Fragment>
-                      <FormattedMessage id="pages.admin.redirects.form.datePicker.title">
+                      <FormattedMessage id="admin/pages.admin.redirects.form.datePicker.title">
                         {text => <div className="mb3 w-100 f6">{text}</div>}
                       </FormattedMessage>
                       <DatePicker
@@ -200,8 +200,8 @@ class Form extends Component<Props, State> {
               >
                 {intl.formatMessage({
                   id: this.isViewMode
-                    ? 'pages.admin.redirects.form.button.back'
-                    : 'pages.admin.redirects.form.button.cancel',
+                    ? 'admin/pages.admin.redirects.form.button.back'
+                    : 'admin/pages.admin.redirects.form.button.cancel',
                 })}
               </Button>
             </div>
@@ -212,13 +212,13 @@ class Form extends Component<Props, State> {
                 variation="danger"
               >
                 {intl.formatMessage({
-                  id: 'pages.admin.redirects.form.button.remove',
+                  id: 'admin/pages.admin.redirects.form.button.remove',
                 })}
               </Button>
             ) : (
               <Button isLoading={isLoading} size="small" type="submit">
                 {intl.formatMessage({
-                  id: 'pages.admin.redirects.form.button.create',
+                  id: 'admin/pages.admin.redirects.form.button.create',
                 })}
               </Button>
             )}

@@ -96,7 +96,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       showToast({
         duration: TOAST_DURATION,
         message: intl.formatMessage({
-          id: 'pages.editor.store.settings.pwa.update-manifest-icon.success',
+          id: 'admin/pages.editor.store.settings.pwa.update-manifest-icon.success',
         }),
       })
     } catch (err) {
@@ -104,7 +104,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       showToast({
         duration: Infinity,
         message: intl.formatMessage({
-          id: 'pages.editor.store.settings.pwa.update-manifest-icon.error',
+          id: 'admin/pages.editor.store.settings.pwa.update-manifest-icon.error',
         }),
       })
     } finally {
@@ -153,7 +153,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       showToast({
         duration: TOAST_DURATION,
         message: intl.formatMessage({
-          id: 'pages.admin.pages.form.save.success',
+          id: 'admin/pages.admin.pages.form.save.success',
         }),
       })
     } catch (err) {
@@ -161,7 +161,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       showToast({
         duration: Infinity,
         message: intl.formatMessage({
-          id: 'pages.admin.pages.form.save.error',
+          id: 'admin/pages.admin.pages.form.save.error',
         }),
       })
     } finally {
@@ -172,12 +172,12 @@ const PWAForm: React.FunctionComponent<Props> = ({
   return (
     <div className="flex flex-column justify-center">
       <div className="t-heading-5">
-        <FormattedMessage id="pages.editor.store.settings.pwa.title" />
+        <FormattedMessage id="admin/pages.editor.store.settings.pwa.title" />
       </div>
       <div className="pt2">
         <div className="flex flex-row items-center">
           <div className="t-heading-7 w-40">
-            <FormattedMessage id="pages.editor.store.settings.pwa.theme_color" />
+            <FormattedMessage id="admin/pages.editor.store.settings.pwa.theme_color" />
           </div>
           <div className="w-100">
             <ColorPicker
@@ -195,7 +195,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       <div className="pt2">
         <div className="flex flex-row items-center">
           <div className="t-heading-7 w-40">
-            <FormattedMessage id="pages.editor.store.settings.pwa.background_color" />
+            <FormattedMessage id="admin/pages.editor.store.settings.pwa.background_color" />
           </div>
           <div className="w-100">
             <ColorPicker
@@ -215,7 +215,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
           disabled={submitting}
           size="small"
           label={intl.formatMessage({
-            id: 'pages.editor.store.settings.pwa.start_url',
+            id: 'admin/pages.editor.store.settings.pwa.start_url',
           })}
           value={manifest.start_url}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -228,7 +228,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
           disabled={submitting}
           value={manifest.orientation}
           label={intl.formatMessage({
-            id: 'pages.editor.store.settings.pwa.screen-orientation',
+            id: 'admin/pages.editor.store.settings.pwa.screen-orientation',
           })}
           options={ORIENTATION_OPTIONS.map(option => ({
             ...option,
@@ -247,7 +247,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
           disabled={submitting}
           value={manifest.display}
           label={intl.formatMessage({
-            id: 'pages.editor.store.settings.pwa.display',
+            id: 'admin/pages.editor.store.settings.pwa.display',
           })}
           options={DISPLAY_OPTIONS.map(option => ({
             ...option,
@@ -272,7 +272,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
                 : ''
             }
             schema={{
-              title: 'pages.editor.store.settings.pwa.android-logo-icon',
+              title: 'admin/pages.editor.store.settings.pwa.android-logo-icon',
             }}
             shouldMutate={false}
             onChange={(_: any, icon: File) => uploadIcon({ icon })}
@@ -286,7 +286,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
                 ? new URL(`https://${location.hostname}/${iOSIcon.src}`).href
                 : ''
             }
-            schema={{ title: 'pages.editor.store.settings.pwa.ios-logo-icon' }}
+            schema={{ title: 'admin/pages.editor.store.settings.pwa.ios-logo-icon' }}
             shouldMutate={false}
             onChange={(_: any, icon: File) => uploadIcon({ icon, iOS: true })}
           />
@@ -295,7 +295,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       {splash && (
         <div className="pt6">
           <div className="t-heading-7 mb4">
-            <FormattedMessage id="pages.editor.store.settings.pwa.splash-screen" />
+            <FormattedMessage id="admin/pages.editor.store.settings.pwa.splash-screen" />
           </div>
           <div className="w-100 flex justify-center items-center">
             <img
@@ -308,7 +308,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
       <div className="pt6">
         <Toggle
           label={intl.formatMessage({
-            id: 'pages.editor.store.settings.pwa.disable-prompt',
+            id: 'admin/pages.editor.store.settings.pwa.disable-prompt',
           })}
           checked={!settings.disablePrompt}
           disabled={submitting}
@@ -326,7 +326,7 @@ const PWAForm: React.FunctionComponent<Props> = ({
           disabled={!isManifestValid(manifest)}
           isLoading={submitting}
         >
-          <FormattedMessage id="pages.admin.pages.form.button.save" />
+          <FormattedMessage id="admin/pages.admin.pages.form.button.save" />
         </Button>
       </div>
     </div>

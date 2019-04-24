@@ -75,12 +75,12 @@ const StoreForm: React.FunctionComponent<Props> = ({ store, intl, mutate }) => {
       })
         .then(() =>
           showToast(
-            intl.formatMessage({ id: 'pages.admin.pages.form.save.success' })
+            intl.formatMessage({ id: 'admin/pages.admin.pages.form.save.success' })
           )
         )
         .catch(() =>
           showToast(
-            intl.formatMessage({ id: 'pages.admin.pages.form.save.error' })
+            intl.formatMessage({ id: 'admin/pages.admin.pages.form.save.error' })
           )
         )
         .finally(() => setSubmitting(false))
@@ -109,7 +109,7 @@ const StoreForm: React.FunctionComponent<Props> = ({ store, intl, mutate }) => {
   return (
     <div className="flex flex-column justify-center">
       <div className="t-heading-5">
-        <FormattedMessage id="pages.editor.store.settings.title" />
+        <FormattedMessage id="admin/pages.editor.store.settings.title" />
       </div>
       <div className="pt2">
         <Form
@@ -132,7 +132,7 @@ const StoreForm: React.FunctionComponent<Props> = ({ store, intl, mutate }) => {
               onClick={() => setSubmitting(true)}
               isLoading={submitting}
             >
-              <FormattedMessage id="pages.admin.pages.form.button.save" />
+              <FormattedMessage id="admin/pages.admin.pages.form.button.save" />
             </Button>
           </div>
         </Form>

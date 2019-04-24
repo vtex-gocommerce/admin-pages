@@ -64,7 +64,7 @@ class List extends Component<Props, State> {
     return items.length === 0 ? (
       <EmptyState
         title={intl.formatMessage({
-          id: 'pages.admin.redirects.emptyState',
+          id: 'admin/pages.admin.redirects.emptyState',
         })}
       >
         <div className="pt5">
@@ -95,19 +95,19 @@ class List extends Component<Props, State> {
         // tslint:disable:object-literal-sort-keys
         from: {
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.from',
+            id: 'admin/pages.admin.redirects.table.from',
           }),
           type: 'string',
         },
         to: {
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.to',
+            id: 'admin/pages.admin.redirects.table.to',
           }),
           type: 'string',
         },
         type: {
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.type',
+            id: 'admin/pages.admin.redirects.table.type',
           }),
           type: 'string',
           cellRenderer: (cell: { cellData: string }) =>
@@ -115,14 +115,14 @@ class List extends Component<Props, State> {
               <FormattedMessage
                 id={
                   cell.cellData === 'temporary'
-                    ? 'pages.admin.redirects.table.type.temporary'
-                    : 'pages.admin.redirects.table.type.permanent'
+                    ? 'admin/pages.admin.redirects.table.type.temporary'
+                    : 'admin/pages.admin.redirects.table.type.permanent'
                 }
               >
                 {text => <span className="ph4">{text}</span>}
               </FormattedMessage>
             ) : (
-              <FormattedMessage id="pages.admin.redirects.table.type.permanent">
+              <FormattedMessage id="admin/pages.admin.redirects.table.type.permanent">
                 {text => <span className="ph4 silver">{text}</span>}
               </FormattedMessage>
             ),
@@ -134,12 +134,12 @@ class List extends Component<Props, State> {
                 {getFormattedLocalizedDate(cell.cellData, locale)}
               </span>
             ) : (
-              <FormattedMessage id="pages.admin.redirects.table.endDate.default">
+              <FormattedMessage id="admin/pages.admin.redirects.table.endDate.default">
                 {text => <span className="ph4 silver">{text}</span>}
               </FormattedMessage>
             ),
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.endDate.title',
+            id: 'admin/pages.admin.redirects.table.endDate.title',
           }),
           type: 'string',
         },
@@ -149,14 +149,14 @@ class List extends Component<Props, State> {
               <Tag type={cell.cellData ? 'error' : 'success'}>
                 {intl.formatMessage({
                   id: cell.cellData
-                    ? 'pages.admin.redirects.table.status.inactive'
-                    : 'pages.admin.redirects.table.status.active',
+                    ? 'admin/pages.admin.redirects.table.status.inactive'
+                    : 'admin/pages.admin.redirects.table.status.active',
                 })}
               </Tag>
             </div>
           ),
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.status.title',
+            id: 'admin/pages.admin.redirects.table.status.title',
           }),
           type: 'boolean',
         },
