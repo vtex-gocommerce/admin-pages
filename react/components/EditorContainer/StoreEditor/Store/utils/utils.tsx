@@ -6,7 +6,7 @@ import { Button, EmptyState, Spinner } from 'vtex.styleguide'
 const isRefetching = (status: number): boolean => status === 4
 
 const Loading = (): React.ReactElement => (
-  <div className="flex justify-center items-center h-75">
+  <div className="flex justify-center items-center h5">
     <Spinner />
   </div>
 )
@@ -39,7 +39,7 @@ const ErrorMessageComponent: React.FunctionComponent<ErrorMessageProps> = ({
       onClick={() => refetch()}
       isLoading={refetching}
     >
-      <FormattedMessage id="pages.editor.store.settings.refetch" />
+      <FormattedMessage id="admin/pages.editor.store.settings.refetch" />
     </Button>
   </div>
 )

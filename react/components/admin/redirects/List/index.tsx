@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types'
-import React, { Component, Fragment } from 'react'
-import { compose } from 'react-apollo'
+import React, { Component } from 'react'
+import { compose, graphql, MutationFn } from 'react-apollo'
 import { FormattedMessage, injectIntl } from 'react-intl'
 import { withRuntimeContext } from 'vtex.render-runtime'
-import { EmptyState, Table, Tag } from 'vtex.styleguide'
+import {
+  ButtonWithIcon,
+  EmptyState,
+  IconUpload,
+  Table,
+  Tag,
+  ToastConsumerFunctions,
+} from 'vtex.styleguide'
 
 import { getFormattedLocalizedDate } from '../../../../utils/date'
 import { BASE_URL, NEW_REDIRECT_ID } from '../consts'
@@ -14,6 +21,11 @@ interface CustomProps {
   from: number
   items: Redirect[]
   to: number
+  saveRedirectFromFile: MutationFn<{ file: any }>
+  refetch: () => void
+  showToast: ToastConsumerFunctions['showToast']
+  loading: boolean
+  openModal: () => void
 }
 
 export type Props = CustomProps &
@@ -25,6 +37,7 @@ interface State {
     items: Redirect[]
     properties: object
   }
+  isSendingFile: boolean
 }
 
 class List extends Component<Props, State> {
@@ -38,6 +51,7 @@ class List extends Component<Props, State> {
     super(props)
 
     this.state = {
+      isSendingFile: false,
       schema: this.getSchema(props.items, context.culture.locale),
     }
   }
@@ -56,33 +70,93 @@ class List extends Component<Props, State> {
   }
 
   public render() {
-    const { intl } = this.props
-    const { schema } = this.state
+    const { intl, loading, openModal } = this.props
+    const { isSendingFile, schema } = this.state
 
     const items = schema.items
 
     return items.length === 0 ? (
       <EmptyState
         title={intl.formatMessage({
-          id: 'pages.admin.redirects.emptyState',
+          id: 'admin/pages.admin.redirects.emptyState',
         })}
       >
-        <div className="pt5">
-          <CreateButton onClick={this.openNewItem} />
+        <div className="pt5 flex flex-column tc">
+          <div>
+            <CreateButton onClick={this.openNewItem} />
+          </div>
+          <p className="mv2">
+            {intl.formatMessage({ id: 'admin/pages.admin.redirects.or.text' })}
+          </p>
+          <div>
+            <ButtonWithIcon
+              icon={<IconUpload />}
+              variation="secondary"
+              onClick={this.props.openModal}
+              size="small"
+            >
+              {intl.formatMessage({
+                id: 'admin/pages.admin.redirects.emptyState.upload',
+              })}
+            </ButtonWithIcon>
+          </div>
         </div>
       </EmptyState>
     ) : (
-      <Fragment>
-        <div className="flex justify-end mb4">
-          <CreateButton onClick={this.openNewItem} />
-        </div>
+      <>
         <Table
           fullWidth
           items={items}
+          loading={isSendingFile || loading}
           onRowClick={this.viewItem}
           schema={schema}
+          toolbar={{
+            density: {
+              buttonLabel: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.line-density.label',
+              }),
+              highOptionLabel: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.line-density.high',
+              }),
+              lowOptionLabel: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.line-density.low',
+              }),
+              mediumOptionLabel: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.line-density.medium',
+              }),
+            },
+            download: {
+              handleCallback: this.handleDownload,
+              label: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.export',
+              }),
+            },
+            fields: {
+              hideAllLabel: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.fields.hide-all',
+              }),
+              label: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.fields.label',
+              }),
+              showAllLabel: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.fields.show-all',
+              }),
+            },
+            newLine: {
+              handleCallback: this.openNewItem,
+              label: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.button.create',
+              }),
+            },
+            upload: {
+              handleCallback: this.handleUpload,
+              label: intl.formatMessage({
+                id: 'admin/pages.admin.redirects.table.toolbar.import',
+              }),
+            },
+          }}
         />
-      </Fragment>
+      </>
     )
   }
 
@@ -95,19 +169,19 @@ class List extends Component<Props, State> {
         // tslint:disable:object-literal-sort-keys
         from: {
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.from',
+            id: 'admin/pages.admin.redirects.table.from',
           }),
           type: 'string',
         },
         to: {
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.to',
+            id: 'admin/pages.admin.redirects.table.to',
           }),
           type: 'string',
         },
         type: {
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.type',
+            id: 'admin/pages.admin.redirects.table.type',
           }),
           type: 'string',
           cellRenderer: (cell: { cellData: string }) =>
@@ -115,14 +189,14 @@ class List extends Component<Props, State> {
               <FormattedMessage
                 id={
                   cell.cellData === 'temporary'
-                    ? 'pages.admin.redirects.table.type.temporary'
-                    : 'pages.admin.redirects.table.type.permanent'
+                    ? 'admin/pages.admin.redirects.table.type.temporary'
+                    : 'admin/pages.admin.redirects.table.type.permanent'
                 }
               >
                 {text => <span className="ph4">{text}</span>}
               </FormattedMessage>
             ) : (
-              <FormattedMessage id="pages.admin.redirects.table.type.permanent">
+              <FormattedMessage id="admin/pages.admin.redirects.table.type.permanent">
                 {text => <span className="ph4 silver">{text}</span>}
               </FormattedMessage>
             ),
@@ -134,31 +208,14 @@ class List extends Component<Props, State> {
                 {getFormattedLocalizedDate(cell.cellData, locale)}
               </span>
             ) : (
-              <FormattedMessage id="pages.admin.redirects.table.endDate.default">
+              <FormattedMessage id="admin/pages.admin.redirects.table.endDate.default">
                 {text => <span className="ph4 silver">{text}</span>}
               </FormattedMessage>
             ),
           title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.endDate.title',
+            id: 'admin/pages.admin.redirects.table.endDate.title',
           }),
           type: 'string',
-        },
-        disabled: {
-          cellRenderer: (cell: { cellData: boolean }) => (
-            <div className="ph4">
-              <Tag type={cell.cellData ? 'error' : 'success'}>
-                {intl.formatMessage({
-                  id: cell.cellData
-                    ? 'pages.admin.redirects.table.status.inactive'
-                    : 'pages.admin.redirects.table.status.active',
-                })}
-              </Tag>
-            </div>
-          ),
-          title: intl.formatMessage({
-            id: 'pages.admin.redirects.table.status.title',
-          }),
-          type: 'boolean',
         },
         // tslint:enable:object-literal-sort-keys
       },
@@ -177,6 +234,12 @@ class List extends Component<Props, State> {
     const selectedItem = event.rowData
 
     navigate({ to: `${BASE_URL}/${selectedItem.id}` })
+  }
+
+  private handleUpload = () => this.props.openModal()
+
+  private handleDownload() {
+    window.open('/_v/private/pages/redirects.csv')
   }
 }
 
