@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.0] - 2019-04-28
+
+### Changed
+
+- Pass blockId to ListContent query.
+
+### Removed
+
+- Remove layout props editions.
+- Disable reorder components.
+
+### Fixed
+
+- Correctly reset content when discarding.
+
+## [3.4.2] - 2019-04-26
+
+### Changed
+
+- Refactor code to remove usage of `compose` from `react-apollo` as it shouldn't be used with Typescript.
+
+## [3.4.1] - 2019-04-26
+
+### Fixed
+
+- **`__provideRuntime`**
+  - Prevents query from stopping execution by using a try catch block.
+
+### Changed
+
+- **`PageEditor`**
+  - Spread messages object instead of replacing.
+
 ## [3.4.0] - 2019-04-24
 
 ## [3.3.0] - 2019-04-24

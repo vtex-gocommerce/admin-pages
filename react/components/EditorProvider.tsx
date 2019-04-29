@@ -1,8 +1,7 @@
 import ApolloClient from 'apollo-client'
-import PropTypes from 'prop-types'
 import { difference, equals, pathOr, uniq } from 'ramda'
 import React, { Component } from 'react'
-import { compose, DataProps, withApollo } from 'react-apollo'
+import { withApollo } from 'react-apollo'
 import { canUseDOM, withRuntimeContext } from 'vtex.render-runtime'
 import { ToastProvider } from 'vtex.styleguide'
 
@@ -12,9 +11,7 @@ import { EditorContext } from './EditorContext'
 import MessagesContext, { IMessagesContext } from './MessagesContext'
 
 type Props = RenderContextProps &
-  DataProps<{ availableConditions: [Condition] }> &
-  IMessagesContext &
-  {client: ApolloClient<any>}
+  IMessagesContext & { client: ApolloClient<any> }
 
 interface State {
   activeConditions: string[]
@@ -40,10 +37,6 @@ const viewPorts: { [name: string]: Viewport[] } = {
 }
 
 class EditorProvider extends Component<Props, State> {
-  public static contextTypes = {
-    components: PropTypes.object,
-  }
-
   private unlisten?: (() => void) | void
 
   constructor(props: Props) {
@@ -70,11 +63,18 @@ class EditorProvider extends Component<Props, State> {
         shouldUpdateRuntime?: boolean
       ) => {
         const { client } = this.props
-        const formattedEditorMessages = await editorMessagesFromRuntime({
-          client,
-          domain: 'admin',
-          runtime,
-        })
+        let formattedEditorMessages = {}
+
+        try {
+          formattedEditorMessages = await editorMessagesFromRuntime({
+            client,
+            domain: 'admin',
+            runtime,
+          })
+        } catch (e) {
+          console.log(e)
+        }
+
         this.props.setMessages({
           ...messages,
           ...formattedEditorMessages,
@@ -316,8 +316,6 @@ class EditorProvider extends Component<Props, State> {
       activeConditions,
       addCondition: this.handleAddCondition,
       allMatches,
-      conditions:
-        (this.props.data && this.props.data.availableConditions) || [],
       editExtensionPoint: this.editExtensionPoint,
       editMode,
       editTreePath,
@@ -333,22 +331,18 @@ class EditorProvider extends Component<Props, State> {
       viewport,
     }
 
-    const childrenWithSidebar = (
-      <EditorContainer
-        editor={editor}
-        runtime={iframeRuntime}
-        toggleShowAdminControls={this.handleToggleShowAdminControls}
-        viewports={this.getAvailableViewports(device)}
-        visible={showAdminControls}
-      >
-        {children}
-      </EditorContainer>
-    )
-
     return (
       <ToastProvider positioning="parent">
         <EditorContext.Provider value={editor}>
-          {childrenWithSidebar}
+          <EditorContainer
+            editor={editor}
+            runtime={iframeRuntime}
+            toggleShowAdminControls={this.handleToggleShowAdminControls}
+            viewports={this.getAvailableViewports(device)}
+            visible={showAdminControls}
+          >
+            {children}
+          </EditorContainer>
         </EditorContext.Provider>
       </ToastProvider>
     )
@@ -359,7 +353,7 @@ class EditorProvider extends Component<Props, State> {
   }
 }
 
-const EditorWithMessageContext = (props: Props) => (
+const EditorWithMessageContext = (props: Omit<Props, 'setMessages'>) => (
   <MessagesContext.Consumer>
     {({ setMessages }) => (
       <EditorProvider {...props} setMessages={setMessages} />
@@ -367,4 +361,10 @@ const EditorWithMessageContext = (props: Props) => (
   </MessagesContext.Consumer>
 )
 
-export default compose(withRuntimeContext, withApollo)(EditorWithMessageContext)
+const EditorWithApolloAndRuntime = withRuntimeContext(
+  withApollo<
+    Omit<React.ComponentProps<typeof EditorWithMessageContext>, 'client'>
+  >(EditorWithMessageContext)
+)
+
+export default EditorWithApolloAndRuntime
