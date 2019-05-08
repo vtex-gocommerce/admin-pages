@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.1] - 2019-05-06
+
+### Fixed
+
+- Split query to get messages in case there are too many components.
+
+## [3.6.0] - 2019-05-03
+
+### Added
+
+- **EditorContainer**
+  - Add `sticky` property to tabs at Store Settings menu.
+
+## [3.5.2] - 2019-05-02
+
+### Fixed
+
+- Passing `blockId` on `SaveContent` mutation.
+
+## [3.5.1] - 2019-05-02
+
+### Removed
+
+- **`editbar.global.css`**
+  - Remove styles that changed elements globally: `html`, `body`, and `.render-provider`.
+
 ## [3.5.0] - 2019-04-28
 
 ### Changed
