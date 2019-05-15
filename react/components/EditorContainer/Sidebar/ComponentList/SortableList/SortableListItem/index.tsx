@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { injectIntl } from 'react-intl'
+import { defineMessages, injectIntl } from 'react-intl'
 import { SortableElement, SortableElementProps } from 'react-sortable-hoc'
 
 import { NormalizedComponent } from '../../typings'
@@ -26,6 +26,13 @@ interface State {
   isExpanded: boolean
 }
 
+const messages = defineMessages({
+  delete: {
+    defaultMessage: 'Delete',
+    id: 'admin/pages.editor.component-list.action-menu.delete',
+  },
+})
+
 class SortableListItem extends Component<Props, State> {
   private actionMenuOptions: ActionMenuOption[]
 
@@ -34,9 +41,7 @@ class SortableListItem extends Component<Props, State> {
 
     this.actionMenuOptions = [
       {
-        label: props.intl.formatMessage({
-          id: 'admin/pages.editor.component-list.action-menu.delete',
-        }),
+        label: props.intl.formatMessage(messages.delete),
         onClick: this.handleDelete,
       },
     ]
@@ -49,7 +54,8 @@ class SortableListItem extends Component<Props, State> {
   public render() {
     const { component, onEdit, onMouseEnter, onMouseLeave } = this.props
 
-    const subitems = component.components
+    const subitems = component.components || []
+    const hasSubItems = subitems.length > 0
 
     return (
       <li className="list">
@@ -65,7 +71,7 @@ class SortableListItem extends Component<Props, State> {
               isExpandable={!!subitems}
             />
           )}
-          {subitems && (
+          {hasSubItems && (
             <ExpandArrow
               hasLeftMargin={!component.isSortable}
               isExpanded={this.state.isExpanded}
@@ -73,7 +79,7 @@ class SortableListItem extends Component<Props, State> {
             />
           )}
           <Item
-            hasSubItems={!!subitems}
+            hasSubItems={hasSubItems}
             isSortable={component.isSortable}
             onEdit={onEdit}
             onMouseEnter={onMouseEnter}
@@ -101,13 +107,16 @@ class SortableListItem extends Component<Props, State> {
                     index !== subitems.length - 1 ? 'bb b--light-silver ' : ''
                   }`}
                 >
-                  <Item
-                    isChild
+                  <SortableListItem
+                    intl={this.props.intl}
+                    component={item}
+                    disabled={!item.isSortable}
+                    index={index}
+                    key={item.treePath}
+                    onDelete={this.handleDelete}
                     onEdit={onEdit}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    title={item.name}
-                    treePath={item.treePath}
                   />
                 </div>
               </li>
