@@ -1,7 +1,7 @@
 {
   "vendor": "gocommerce",
   "name": "admin-pages",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "title": "VTEX Pages Admin",
   "description": "The VTEX Pages CMS admin interface",
   "builders": {
@@ -32,5 +32,6 @@
     {
       "name": "vtex.file-manager:saveFileAsync"
     }
-  ]
+  ],
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
