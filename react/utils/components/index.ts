@@ -1,4 +1,4 @@
-import { merge, mergeDeepRight } from 'ramda'
+import { merge, mergeDeepRight, pickBy, reduce, toPairs } from 'ramda'
 import { global, Window } from 'vtex.render-runtime'
 
 import {
@@ -9,9 +9,74 @@ import {
   UpdateExtensionFromFormParams,
 } from './typings'
 
+const reduceProperties = (isContent: boolean) => (
+  acc: ComponentSchemaProperties,
+  [propertyName, property]: [string, ComponentSchema]
+) => {
+  if (property.type === 'object') {
+    property.properties = reduce(
+      reduceProperties(isContent),
+      {},
+      toPairs(property.properties)
+    )
+  }
+  if (Boolean(property.isLayout) !== isContent) {
+    acc[propertyName] = property
+  }
+
+  return acc
+}
+
+const hideLayoutOrContentFromSchema = (
+  schema: ComponentSchema,
+  isContent: boolean
+) => {
+  if (Boolean(schema.isLayout) === isContent) {
+    return {}
+  }
+
+  if (schema.type === 'object' && schema.properties) {
+    const newSchema = {
+      ...schema,
+      properties: reduce(
+        reduceProperties(isContent),
+        {},
+        toPairs(schema.properties)
+      ),
+    }
+    return newSchema
+  }
+
+  return schema
+}
+
+const setArraySchemaDefaultsDeep: (
+  schema: ComponentSchema
+) => ComponentSchema = schema => {
+  if (schema.type === 'array') {
+    schema.items = setArraySchemaDefaultsDeep(schema.items)
+
+    if (!schema.minItems || schema.minItems < 1) {
+      schema.minItems = 1
+    }
+
+    schema.items.properties = {
+      __editorItemTitle: {
+        default: schema.items.title,
+        title: 'Item title',
+        type: 'string',
+      },
+      ...schema.items.properties,
+    }
+  }
+
+  return schema
+}
+
 export const getComponentSchema = ({
   component,
   contentSchema,
+  isContent,
   propsOrContent,
   runtime,
 }: GetComponentSchemaParams): ComponentSchema => {
@@ -23,30 +88,10 @@ export const getComponentSchema = ({
     type: 'object',
   }
 
-  const setArraySchemaDefaultsDeep: (
-    schema: ComponentSchema
-  ) => ComponentSchema = schema => {
-    if (schema.type === 'array') {
-      schema.items = setArraySchemaDefaultsDeep(schema.items)
-
-      if (!schema.minItems || schema.minItems < 1) {
-        schema.minItems = 1
-      }
-
-      schema.items.properties = {
-        __editorItemTitle: {
-          default: schema.items.title,
-          title: 'Item title',
-          type: 'string',
-        },
-        ...schema.items.properties,
-      }
-    }
-
-    return schema
-  }
-
-  const adaptedComponentSchema = setArraySchemaDefaultsDeep(componentSchema)
+  const adaptedComponentSchema = hideLayoutOrContentFromSchema(
+    setArraySchemaDefaultsDeep(componentSchema),
+    isContent
+  )
 
   if (!contentSchema) {
     return adaptedComponentSchema
@@ -72,6 +117,7 @@ export const getExtension = (
     implements: extensionImplements = [],
     props = {},
     shouldRender = false,
+    title = '',
   } = extensions[editTreePath!] || {}
 
   return {
@@ -87,6 +133,7 @@ export const getExtension = (
     implements: extensionImplements,
     props: props || {},
     shouldRender,
+    title,
   }
 }
 
@@ -182,6 +229,7 @@ export const getSchemaPropsOrContentFromRuntime = ({
   const componentSchema = getComponentSchema({
     component,
     contentSchema,
+    isContent,
     propsOrContent,
     runtime,
   })
@@ -221,7 +269,7 @@ export const updateExtensionFromForm = ({
   runtime,
   treePath,
 }: UpdateExtensionFromFormParams) => {
-  runtime.updateExtension(treePath, {
+  return runtime.updateExtension(treePath, {
     ...runtime.extensions[treePath],
     [isContent ? 'content' : 'props']: data,
   })

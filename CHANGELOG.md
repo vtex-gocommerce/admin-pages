@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.10.1] - 2019-05-23
+
+### Changed
+
+- When the page context can't be identified, set the configuration scope as "this template" and display a toast with a brief explanation.
+
+### Fixed
+
+- Page context evaluation logic in configuration cards' tags.
+
+## [3.10.0] - 2019-05-23
+
+### Added
+
+- Support for `title` that comes from block.
+
+### Changed
+
+- `title` from block is also considered when deciding whether to show or hide the extension on the Sidebar.
+
+## [3.9.1] - 2019-05-23
+
+### Changed
+
+- Reset content logic to improve UX.
+
+### Added
+
+- Add slight debounce to `formChange`.
+
+### Fixed
+
+- Typo on `HighlightOverlay` state.
+- Only passing relevant schema, i.e., `layout` or `content` to Form.
+- `useMemo` on some components instead of recreating an object every render.
+
 ## [3.9.0] - 2019-05-22
 
 ### Added

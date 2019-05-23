@@ -1,26 +1,42 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl'
 import { RadioGroup } from 'vtex.styleguide'
 
 import { getScopeStandardOptions } from './utils'
 
 interface CustomProps {
+  isDisabled: boolean
+  isSitewide: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   pageContext: PageContext
   scope: ConfigurationScope
-  isSitewide: boolean
 }
 
 type Props = CustomProps & InjectedIntlProps
 
 const ScopeSelector: React.FunctionComponent<Props> = ({
   intl,
+  isDisabled,
   isSitewide,
   onChange,
   pageContext,
   scope,
 }) => {
   const standardOptions = getScopeStandardOptions(intl, pageContext)
+  const options = useMemo(
+    () =>
+      isSitewide
+        ? [
+            {
+              label: intl.formatMessage({
+                id: 'admin/pages.editor.components.condition.scope.sitewide',
+              }),
+              value: 'sitewide',
+            },
+          ]
+        : standardOptions,
+    [isSitewide]
+  )
 
   return (
     <Fragment>
@@ -28,26 +44,14 @@ const ScopeSelector: React.FunctionComponent<Props> = ({
         {message => <div className="mb5">{message}</div>}
       </FormattedMessage>
       <RadioGroup
-        disabled={isSitewide}
+        disabled={isDisabled}
         name="scopes"
         onChange={onChange}
-        options={
-          isSitewide
-            ? [
-                {
-                  label: intl.formatMessage({
-                    id:
-                      'admin/pages.editor.components.condition.scope.sitewide',
-                  }),
-                  value: 'sitewide',
-                },
-              ]
-            : standardOptions
-        }
+        options={options}
         value={scope}
       />
     </Fragment>
   )
 }
 
-export default injectIntl(ScopeSelector)
+export default React.memo(injectIntl(ScopeSelector))
