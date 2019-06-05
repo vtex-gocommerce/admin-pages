@@ -7,6 +7,99 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.13.4] - 2019-06-05
+
+### Fixed
+
+- `withPWASettings` condition to query the default colors from Styles GraphQL.
+
+## [3.13.3] - 2019-06-04
+
+### Fixed
+
+- Deleting item when pressing Enter inside a carousel
+- Navigation infinite loading when iframe runtime crashes.
+- "Create new" message on pages portuguese translation.
+
+## [3.13.2] - 2019-06-03
+
+### Fixed
+
+- `Scheduler`'s second `DatePicker`'s (`to`) position.
+
+## [3.13.1] - 2019-05-29
+
+### Fixed
+
+- i18n mapping issues.
+
+### Removed
+
+- Unused CSS class from configuration card.
+
+## [3.13.0] - 2019-05-29
+
+### Added
+
+- Loading overlay to content editor.
+- Scope and condition information to configuration cards.
+
+### Changed
+
+- Make component editor's header editable.
+- Configuration card layout.
+- Size and color of the component editor's headers' back arrow.
+- Standardize the component editor's headers.
+- Move configuration creation button up and change its label.
+- Increase spacing between form buttons.
+- Use `EditorContext`'s loading state instead of `FormMetaContext`'s one.
+- Use method to get `EditorContext`'s loading state instead of an attribute.
+
+### Fixed
+
+- `ModeButton` default messages.
+- `vtex.native-types` typings.
+
+## [3.12.1] - 2019-05-29
+
+### Fixed
+
+- Fixed style editor preview where tachyons was overriding components' css override.
+
+## [3.12.0] - 2019-05-28
+
+### Added
+
+- Hint to Page Form.
+- Validate if URL begins with '/'.
+- Description and Keywords fields to Page Form when creating or editing a custom page.
+
+### Fixed
+
+- Image Uploader now has translated messages.
+- Loading issue when navigating.
+- Back button was updating the form before the user selected the discard option.
+
+## [3.11.0] - 2019-05-28
+
+## [3.10.5] - 2019-05-28
+
+### Fixed
+
+- Add format IO messages to radio button labels
+
+## [3.10.4] - 2019-05-28
+
+### Fixed
+
+- Keep store editors state when hidden by store preview.
+
+## [3.10.3] - 2019-05-28
+
+### Fixed
+
+- Add i18n to editor description field
+
 ## [3.10.2] - 2019-05-23
 
 ### Changed

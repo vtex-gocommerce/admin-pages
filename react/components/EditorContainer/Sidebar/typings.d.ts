@@ -2,10 +2,8 @@ export interface FormMetaContext {
   addToI18nMapping: (newEntry: Record<string, string>) => void
   clearI18nMapping: () => void
   getI18nMapping: () => Record<string, string>
-  getIsLoading: () => boolean
   getWasModified: () => boolean
   setWasModified: (newValue: boolean, callback?: () => void) => void
-  toggleLoading: (callback?: () => void) => void
 }
 
 export interface ModalContext {
@@ -27,6 +25,10 @@ export interface ModalContext {
 export interface SidebarComponent {
   name: string
   treePath: string
+}
+
+export interface ModifiedSidebarComponent extends SidebarComponent {
+  modifiedTreePath: string
 }
 
 export interface ComponentEditorFormContext {

@@ -94,10 +94,9 @@ class EditorProvider extends Component<Props, State> {
         }
 
         const newState = {
-          ...this.state,
           iframeRuntime: runtime,
           ...(this.state.iframeRuntime
-            ? {}
+            ? ({} as object)
             : {
                 iframeWindow: (document.getElementById(
                   'store-iframe'
@@ -218,7 +217,6 @@ class EditorProvider extends Component<Props, State> {
 
   public handleToggleShowAdminControls = () => {
     const showAdminControls = !this.state.showAdminControls
-    const editMode = false
 
     Array.prototype.forEach.call(
       document.getElementsByClassName('render-container'),
@@ -228,7 +226,7 @@ class EditorProvider extends Component<Props, State> {
           : e.classList.remove('editor-provider')
     )
 
-    this.setState({ showAdminControls, editMode })
+    this.setState({ showAdminControls })
   }
 
   public handleAddCondition = (conditionId: string) => {
@@ -313,7 +311,6 @@ class EditorProvider extends Component<Props, State> {
       editTreePath,
       iframeRuntime,
       iframeWindow,
-      isLoading,
       messages,
       mode,
       showAdminControls,
@@ -327,8 +324,8 @@ class EditorProvider extends Component<Props, State> {
       editExtensionPoint: this.editExtensionPoint,
       editMode,
       editTreePath,
+      getIsLoading: this.getIsLoading,
       iframeWindow,
-      isLoading,
       messages,
       mode,
       removeCondition: this.handleRemoveCondition,
@@ -356,6 +353,8 @@ class EditorProvider extends Component<Props, State> {
       </ToastProvider>
     )
   }
+
+  private getIsLoading = () => this.state.isLoading
 
   private handleSetIsLoading = (isLoading: boolean) => {
     this.setState({ isLoading })

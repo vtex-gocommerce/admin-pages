@@ -45,10 +45,10 @@ const Content = (props: Props) => {
       if (path.current !== iframeRuntime.route.path) {
         setComponents(getInitialComponents(props))
         editor.setIsLoading(false)
+        path.current = iframeRuntime.route.path
       }
-      path.current = iframeRuntime.route.path
     },
-    [iframeRuntime]
+    [iframeRuntime.route.path]
   )
 
   if (editor.editTreePath === null) {
@@ -92,7 +92,7 @@ const Content = (props: Props) => {
                 <DeleteContentMutation>
                   {deleteContent =>
                     loading ? (
-                      <div className="mt5 flex justify-center">
+                      <div className="mt9 flex justify-center">
                         <Spinner />
                       </div>
                     ) : (

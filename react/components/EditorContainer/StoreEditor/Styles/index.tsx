@@ -47,8 +47,9 @@ const createStyleTag = (window: Window, id: string) => {
   }
   const styleTag = window.document.createElement('style')
   styleTag.setAttribute('id', id)
-  if (window.document.head) {
-    window.document.head.append(styleTag)
+  const tachyonsTag = window.document.getElementById('style_link')
+  if (tachyonsTag) {
+    tachyonsTag.after(styleTag)
   }
 }
 
@@ -66,15 +67,18 @@ const removeStyleTag = (window: Window, id: string) => {
 const Styles: React.FunctionComponent<Props> = ({ iframeWindow }) => {
   const [editing, setEditing] = useState<EditingState>(undefined)
 
-  useEffect(() => {
-    createStyleTag(iframeWindow, PATH_STYLE_TAG_ID)
-    createStyleTag(iframeWindow, SHEET_STYLE_TAG_ID)
+  useEffect(
+    () => {
+      createStyleTag(iframeWindow, PATH_STYLE_TAG_ID)
+      createStyleTag(iframeWindow, SHEET_STYLE_TAG_ID)
 
-    return () => {
-      removeStyleTag(iframeWindow, PATH_STYLE_TAG_ID)
-      removeStyleTag(iframeWindow, SHEET_STYLE_TAG_ID)
-    }
-  })
+      return () => {
+        removeStyleTag(iframeWindow, PATH_STYLE_TAG_ID)
+        removeStyleTag(iframeWindow, SHEET_STYLE_TAG_ID)
+      }
+    },
+    [editing]
+  )
 
   return editing ? (
     <StyleEditor
