@@ -114,6 +114,7 @@ export const getExtension = (
     composition = 'blocks',
     configurationsIds = [],
     content = {},
+    contentMapId = '',
     implementationIndex = 0,
     implements: extensionImplements = [],
     props = {},
@@ -131,6 +132,7 @@ export const getExtension = (
     composition,
     configurationsIds,
     content,
+    contentMapId,
     implementationIndex,
     implements: extensionImplements,
     props: props || {},
@@ -171,7 +173,6 @@ export const getSchemaPropsOrContent = ({
   messages,
   properties,
   propsOrContent,
-  shouldTranslate = true,
 }: GetSchemaPropsOrContentParams): object => {
   if (!properties || !propsOrContent) {
     return {}
@@ -200,9 +201,11 @@ export const getSchemaPropsOrContent = ({
         messages,
         properties: currProperty.properties,
         propsOrContent: propsOrContent[currKey],
-        shouldTranslate,
       })
-    } else if (currProperty.format === 'IOMessage' && messages) {
+    } else if (
+      ['IOMessage', 'RichText'].includes(currProperty.format) &&
+      messages
+    ) {
       const id =
         propsOrContent[
           i18nMapping && i18nMapping[currKey] !== undefined
@@ -210,13 +213,10 @@ export const getSchemaPropsOrContent = ({
             : currKey
         ]
 
-      adaptedProperty[currKey] = shouldTranslate
-        ? translateMessage({
-            dictionary: messages,
-            id,
-          })
-        : Object.keys(i18nMapping).find(key => i18nMapping[key] === id) ||
-          propsOrContent[currKey]
+      adaptedProperty[currKey] = translateMessage({
+        dictionary: messages,
+        id,
+      })
     } else {
       adaptedProperty[currKey] = propsOrContent[currKey]
     }
