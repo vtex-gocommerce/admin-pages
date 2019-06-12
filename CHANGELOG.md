@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.14.3] - 2019-06-11
+
+### Fixed
+
+- Typo in the page creation form.
+
+## [3.14.2] - 2019-06-11
+
+### Changed
+
+- Styles Editor feedback `Toast` is now positioned to the left.
+
+## [3.14.1] - 2019-06-10
+
+### Fixed
+
+- When deleting a content configuration, the configuration list's `activeExtension` wasn't being updated and `updateRuntime` wasn't being run synchronously.
+
 ## [3.14.0] - 2019-06-06
 
 ### Added
@@ -19,7 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Prevent invalid values at `TextArea``.
+- Prevent invalid values at `TextArea`.
 
 ### Removed
 
