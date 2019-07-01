@@ -1,10 +1,10 @@
 import { JSONSchema6 } from 'json-schema'
 import React, { Component, Fragment } from 'react'
 import { graphql, MutationFunc } from 'react-apollo'
-import { ImageFile } from 'react-dropzone'
 import {
   defineMessages,
   FormattedMessage,
+  InjectedIntl,
   InjectedIntlProps,
   injectIntl,
 } from 'react-intl'
@@ -22,8 +22,8 @@ import styles from './imageUploader.css'
 
 interface Props extends InjectedIntlProps {
   disabled?: boolean
-  shouldMutate?: boolean
-  onChange: (pathname: string | null, file: ImageFile) => any
+  onChange?: (pathname: string | null) => void
+  onFileDrop?: (file: File) => void
   schema: JSONSchema6
   uploadFile?: MutationFunc<MutationData>
   value: string
@@ -53,7 +53,6 @@ const messages = defineMessages({
 class ImageUploader extends Component<Props, State> {
   public static defaultProps = {
     disabled: false,
-    shouldMutate: true,
     value: '',
   }
 
@@ -166,8 +165,11 @@ class ImageUploader extends Component<Props, State> {
     )
   }
 
-  private handleImageDrop = async (acceptedFiles: ImageFile[]) => {
-    const { intl, shouldMutate, uploadFile } = this.props
+  private handleImageDrop = async (acceptedFiles: File[]) => {
+    const { intl, uploadFile } = this.props as {
+      intl: InjectedIntl
+      uploadFile: MutationFunc<MutationData>
+    }
 
     if (acceptedFiles && acceptedFiles[0]) {
       this.setState({ isLoading: true })
@@ -175,7 +177,7 @@ class ImageUploader extends Component<Props, State> {
       try {
         let url = null
 
-        if (shouldMutate && uploadFile) {
+        if (uploadFile) {
           const {
             data: {
               uploadFile: { fileUrl },
@@ -188,7 +190,11 @@ class ImageUploader extends Component<Props, State> {
 
         if (this.props.onChange) {
           const path = url && new URL(url).pathname
-          await this.props.onChange(path, acceptedFiles[0])
+          this.props.onChange(path)
+        }
+
+        if (this.props.onFileDrop) {
+          this.props.onFileDrop(acceptedFiles[0])
         }
 
         this.setState({ isLoading: false })

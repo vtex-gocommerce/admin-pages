@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.15.2] - 2019-06-27
+
+### Fixed
+
+- Create `onFileDrop` props on `ImageUploader` to make it work both as a `react-jsonschema-form` widget and a standalone component.
+
+## [3.15.1] - 2019-06-26
+
+### Changed
+
+- Prevent click on extensions that have `composition === 'children'`.
+- Change style of items: `ExpandArrow` and `Item` hovers have been separated and no cursor and no hover on uneditable items.
+
 ## [3.15.0] - 2019-06-18
 
 ## [3.14.4] - 2019-06-12
