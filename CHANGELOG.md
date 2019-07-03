@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.15.5] - 2019-07-03
+
+### Fixed
+
+- Content save is now sending values properly.
+
+## [3.15.4] - 2019-07-02
+
+### Changed
+
+- Conditions to show extension on components list: stop considering block `composition` type, and uses whether they're editable or not.
+
+### Fixed
+
+- Showing nested components that are editable.
+- Components list sort logic.
+
+## [3.15.3] - 2019-07-02
+
+### Fixed
+
+- Properly handle `JSONSchema` dependencies and arrays
+
 ## [3.15.2] - 2019-06-27
 
 ### Fixed
